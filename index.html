@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suite Entry Notice Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            margin: 20px;
+        }
+        .section {
+            width: 30%;
+            background: #fff;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        header {
+            text-align: center;
+            color: #bf360c;
+            font-size: 24px;
+            margin: 20px;
+        }
+        .form-section img {
+            display: block;
+            margin: 0 auto 15px;
+            width: 80px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="date"], textarea, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .notice-preview img {
+            width: 50px;
+            display: block;
+            margin: 10px auto;
+        }
+        .print-btn {
+            margin-top: 15px;
+            background: #bf360c;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+        }
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .notice-section {
+                visibility: visible;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>Suite Entry Notice Generator (Office Printer)</header>
+<div class="container">
+    <!-- Form Section -->
+    <div class="section form-section">
+        <img src="https://i.imgur.com/LmweghF.png" alt="Company Logo">
+        <label for="suite-number">Suite Number:</label>
+        <input type="text" id="suite-number" placeholder="e.g., 1205">
+
+        <label for="entry-date">Date of Entry:</label>
+        <input type="date" id="entry-date">
+
+        <label>Person(s) who entered the suite:</label>
+        <div>
+            <input type="checkbox" id="security" name="person-entered" value="Security">
+            <label for="security">Security</label>
+            <br>
+            <input type="checkbox" id="superintendent" name="person-entered" value="Superintendent">
+            <label for="superintendent">Superintendent</label>
+            <br>
+            <input type="checkbox" id="management" name="person-entered" value="Management">
+            <label for="management">Management</label>
+            <br>
+            <input type="checkbox" id="construction" name="person-entered" value="Construction">
+            <label for="construction">Construction</label>
+            <br>
+            <input type="checkbox" id="other" name="person-entered" value="Other">
+            <label for="other">Other</label>
+        </div>
+
+        <label for="entry-type">Entry Type:</label>
+        <select id="entry-type">
+            <option value="Resident Permission">Resident Permission</option>
+            <option value="Emergency">Emergency</option>
+            <option value="Scheduled Maintenance">Scheduled Maintenance</option>
+        </select>
+
+        <label for="nature-visit">Nature of Visit:</label>
+        <textarea id="nature-visit" rows="4" placeholder="Describe the nature of the visit..."></textarea>
+
+        <label>Options:</label>
+        <div>
+            <input type="checkbox" id="work-completed" name="options" value="Work Completed">
+            <label for="work-completed">Work Completed</label>
+            <br>
+            <input type="checkbox" id="work-pending" name="options" value="Work Pending">
+            <label for="work-pending">Work Pending</label>
+            <br>
+            <input type="checkbox" id="contact-management" name="options" value="Please Contact Property Management">
+            <label for="contact-management">Please Contact Property Management</label>
+        </div>
+    </div>
+
+    <!-- Sample Preview Section -->
+    <div class="section sample-preview">
+        <img src="https://i.imgur.com/LmweghF.png" alt="Company Logo">
+        <h3 style="text-align: center;">SUITE ENTRY NOTICE</h3>
+        <img src="https://i.imgur.com/7O6EOHU.png" alt="Lock Image">
+        <p>Suite: ___________</p>
+        <p>Date of Entry: ___________</p>
+        <p>Person(s) who entered: ___________</p>
+        <p>Entry Type: ___________</p>
+        <p>Nature of Visit: ___________</p>
+        <p>Options:</p>
+        <ul>
+            <li>☐ Work Completed</li>
+            <li>☐ Work Pending</li>
+            <li>☐ Please Contact Property Management</li>
+        </ul>
+        <p style="font-size: small;">Questions? Contact Property Management: 647-368-7395</p>
+    </div>
+
+    <!-- Notice Preview Section -->
+    <div class="section notice-preview">
+        <img src="https://i.imgur.com/LmweghF.png" alt="Company Logo">
+        <h3 style="text-align: center;">SUITE ENTRY NOTICE</h3>
+        <img src="https://i.imgur.com/7O6EOHU.png" alt="Lock Image">
+        <div id="notice-content">
+            <!-- Dynamically generated notice content goes here -->
+        </div>
+        <button class="print-btn" onclick="window.print()">Print Notice</button>
+    </div>
+</div>
+
+<script>
+    // JavaScript to dynamically update the notice preview
+    document.addEventListener('input', function () {
+        const suiteNumber = document.getElementById('suite-number').value || "___________";
+        const entryDate = document.getElementById('entry-date').value || "___________";
+        const entryType = document.getElementById('entry-type').value;
+        const natureVisit = document.getElementById('nature-visit').value || "___________";
+        
+        let persons = [];
+        document.querySelectorAll('input[name="person-entered"]:checked').forEach(checkbox => {
+            persons.push(checkbox.value);
+        });
+
+        let options = "";
+        document.querySelectorAll('input[name="options"]').forEach(option => {
+            options += option.checked ? `☑ ${option.nextElementSibling.innerText}<br>` : `☐ ${option.nextElementSibling.innerText}<br>`;
+        });
+
+        const noticeContent = `
+            <p>Suite: ${suiteNumber}</p>
+            <p>Date of Entry: ${entryDate}</p>
+            <p>Person(s) who entered: ${persons.join(", ") || "___________"}</p>
+            <p>Entry Type: ${entryType}</p>
+            <p>Nature of Visit: ${natureVisit}</p>
+            <p>Options:</p>
+            <p>${options}</p>
+            <p style="font-size: small;">Questions? Contact Property Management: 647-368-7395</p>
+        `;
+        document.getElementById('notice-content').innerHTML = noticeContent;
+    });
+</script>
+
+</body>
+</html>
