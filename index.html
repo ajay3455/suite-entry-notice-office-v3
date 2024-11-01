@@ -13,10 +13,30 @@
             font-family: 'Roboto', sans-serif;
             background: linear-gradient(135deg, #fff3e0, #ffe0b2);
         }
-        h1, h2, h3 {
-            color: #bf360c;
-            text-align: center;
+        /* Header Styles */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
         }
+        .header h1 {
+            color: #bf360c;
+            margin: 0;
+        }
+        .header button {
+            background-color: #ff7043;
+            color: #ffffff;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .header button:hover {
+            background-color: #f4511e;
+        }
+        /* Container Styles */
         .container {
             display: flex;
             flex-direction: row;
@@ -67,21 +87,6 @@
         .hidden {
             display: none;
         }
-        /* Button Styles */
-        button {
-            background-color: #ff7043;
-            color: #ffffff;
-            border: none;
-            padding: 12px 20px;
-            font-size: 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 20px;
-        }
-        button:hover {
-            background-color: #f4511e;
-        }
         /* Notice Styles */
         .notice {
             text-align: center;
@@ -93,6 +98,7 @@
         }
         .notice h2 {
             margin: 10px 0;
+            color: #bf360c;
         }
         .notice-content {
             text-align: left;
@@ -141,15 +147,21 @@
                 margin: 20px 0;
             }
             @page {
-                size: A4;
+                size: A4 portrait;
                 margin: 10mm;
+            }
+            h1 {
+                display: none;
             }
         }
     </style>
 </head>
 <body>
     <!-- Header -->
-    <h1>Suite Entry Notice Generator (Office Printer)</h1>
+    <div class="header">
+        <h1>Suite Entry Notice Generator (Office Printer)</h1>
+        <button onclick="window.print()">Print Notice (Two per Page)</button>
+    </div>
     <!-- Main Container -->
     <div class="container">
         <!-- Form Section -->
@@ -221,7 +233,6 @@
                     <label><input type="checkbox" id="contact-management"> Please Contact Property Management</label>
                 </div>
             </div>
-            <button onclick="window.print()">Print Notice (Two per Page)</button>
         </div>
         <!-- Sample Preview Section -->
         <div class="section">
