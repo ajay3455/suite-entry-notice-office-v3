@@ -21,17 +21,23 @@
             display: flex;
             flex-direction: row;
             justify-content: space-between;
+            flex-wrap: wrap;
         }
         .section {
-            width: 32%;
+            width: 100%;
+            max-width: 32%;
             background-color: #ffffff;
             padding: 15px;
             border-radius: 12px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             box-sizing: border-box;
+            margin-bottom: 20px;
         }
-        .section h2 {
-            margin-top: 0;
+        /* Responsive Adjustments */
+        @media (min-width: 768px) {
+            .section {
+                width: 32%;
+            }
         }
         /* Form Styles */
         .form-group {
@@ -46,6 +52,8 @@
             width: 100%;
             padding: 8px;
             box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
         textarea {
             resize: vertical;
@@ -58,6 +66,21 @@
         }
         .hidden {
             display: none;
+        }
+        /* Button Styles */
+        button {
+            background-color: #ff7043;
+            color: #ffffff;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #f4511e;
         }
         /* Notice Styles */
         .notice {
@@ -74,6 +97,7 @@
         .notice-content {
             text-align: left;
             margin: 20px 0;
+            font-size: 14px;
         }
         .notice-content p {
             margin: 5px 0;
@@ -89,24 +113,36 @@
             margin-top: 20px;
             font-size: 0.9em;
         }
+        /* Divider Line */
+        .dotted-line {
+            border-top: 1px dotted #000;
+            margin: 20px 0;
+        }
         /* Print Styles */
         @media print {
             body {
                 margin: 0;
+                padding: 0;
             }
-            .container, .header {
+            .container, .header, .section, button {
                 display: none;
             }
             .printable {
+                display: block;
                 width: 100%;
-                page-break-after: avoid;
             }
             .printable .notice {
                 page-break-inside: avoid;
+                margin: 0;
+                padding: 0;
             }
             .dotted-line {
                 border-top: 1px dotted #000;
                 margin: 20px 0;
+            }
+            @page {
+                size: A4;
+                margin: 10mm;
             }
         }
     </style>
@@ -185,6 +221,7 @@
                     <label><input type="checkbox" id="contact-management"> Please Contact Property Management</label>
                 </div>
             </div>
+            <button onclick="window.print()">Print Notice (Two per Page)</button>
         </div>
         <!-- Sample Preview Section -->
         <div class="section">
@@ -218,7 +255,6 @@
             <div class="notice" id="notice-preview">
                 <!-- Notice content will be injected here -->
             </div>
-            <button onclick="window.print()">Print Notice (Two per Page)</button>
         </div>
     </div>
     <!-- Printable Notices -->
