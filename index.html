@@ -1,408 +1,412 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Suite Entry Notice Generator (Office Printer)</title>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
-    <style>
-        /* Global Styles */
-        body {
-            margin: 0;
-            padding: 20px;
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
-        }
-        /* Header Styles */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .header h1 {
-            color: #bf360c;
-            margin: 0;
-        }
-        .header button {
-            background-color: #ff7043;
-            color: #ffffff;
-            border: none;
-            padding: 12px 20px;
-            font-size: 16px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-        .header button:hover {
-            background-color: #f4511e;
-        }
-        /* Container Styles */
-        .container {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            flex-wrap: wrap;
-        }
-        .section {
-            width: 100%;
-            max-width: 32%;
-            background-color: #ffffff;
-            padding: 15px;
-            border-radius: 12px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            box-sizing: border-box;
-            margin-bottom: 20px;
-        }
-        /* Responsive Adjustments */
-        @media (min-width: 768px) {
-            .section {
-                width: 32%;
-            }
-        }
-        /* Form Styles */
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        input[type="text"], input[type="date"], select, textarea {
-            width: 100%;
-            padding: 8px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        textarea {
-            resize: vertical;
-        }
-        .checkbox-group, .guard-names {
-            margin-left: 20px;
-        }
-        .checkbox-group label, .guard-names label {
-            font-weight: normal;
-        }
-        .hidden {
-            display: none;
-        }
-        /* Notice Styles */
-        .notice {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .notice img {
-            max-width: 100px;
-            margin-bottom: 10px;
-        }
-        .notice h2 {
-            margin: 10px 0;
-            color: #bf360c;
-        }
-        .notice-content {
-            text-align: left;
-            margin: 20px 0;
-            font-size: 14px;
-        }
-        .notice-content p {
-            margin: 5px 0;
-        }
-        .options {
-            margin-top: 10px;
-        }
-        .options span {
-            display: block;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 0.9em;
-        }
-        /* Divider Line */
-        .dotted-line {
-            border-top: 1px dotted #000;
-            margin: 20px 0;
-        }
-        /* Print Styles */
-        @media print {
-            body {
-                margin: 0;
-                padding: 0;
-            }
-            .container, .header, .section, button {
-                display: none;
-            }
-            .printable {
-                display: block;
-                width: 100%;
-            }
-            .printable .notice {
-                page-break-inside: avoid;
-                margin: 0;
-                padding: 0;
-            }
-            .dotted-line {
-                border-top: 1px dotted #000;
-                margin: 20px 0;
-            }
-            @page {
-                size: A4 portrait;
-                margin: 10mm;
-            }
-            h1 {
-                display: none;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Suite Entry Notice Generator (Office Printer)</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+  <style>
+    /* Global Styles */
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+    }
+    /* Header Styles */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header h1 {
+      color: #bf360c;
+      margin: 0;
+    }
+    .header button {
+      background-color: #ff7043;
+      color: #ffffff;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .header button:hover {
+      background-color: #f4511e;
+    }
+    /* Container Styles */
+    .container {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .section {
+      width: 100%;
+      max-width: 32%;
+      background-color: #ffffff;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      box-sizing: border-box;
+      margin-bottom: 20px;
+    }
+    /* Responsive Adjustments */
+    @media (min-width: 768px) {
+      .section {
+        width: 32%;
+      }
+    }
+    /* Form Styles */
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    input[type="text"], input[type="date"], select, textarea {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    textarea {
+      resize: vertical;
+    }
+    .checkbox-group {
+      margin-left: 20px;
+    }
+    .checkbox-group label {
+      font-weight: normal;
+    }
+    .hidden {
+      display: none;
+    }
+    /* Notice Styles */
+    .notice {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .notice img {
+      max-width: 100px;
+      margin-bottom: 10px;
+    }
+    .notice h2 {
+      margin: 10px 0;
+      color: #bf360c;
+    }
+    .notice-content {
+      text-align: left;
+      margin: 20px 0;
+      font-size: 14px;
+    }
+    .notice-content p {
+      margin: 5px 0;
+    }
+    .options {
+      margin-top: 10px;
+    }
+    .options span {
+      display: block;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.9em;
+    }
+    /* Divider Line */
+    .dotted-line {
+      border-top: 1px dotted #000;
+      margin: 20px 0;
+    }
+    /* Print Styles */
+    @media print {
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      .container, .header, .section, button {
+        display: none;
+      }
+      .printable {
+        display: block;
+        width: 100%;
+      }
+      .printable .notice {
+        page-break-inside: avoid;
+        margin: 0;
+        padding: 0;
+      }
+      .dotted-line {
+        border-top: 1px dotted #000;
+        margin: 20px 0;
+      }
+      @page {
+        size: A4 portrait;
+        margin: 10mm;
+      }
+      h1 {
+        display: none;
+      }
+    }
+  </style>
 </head>
 <body>
-    <!-- Header -->
-    <div class="header">
-        <h1>Suite Entry Notice Generator (Office Printer)</h1>
-        <button onclick="window.print()">Print Notice (Two per Page)</button>
+  <!-- Header -->
+  <div class="header">
+    <h1>Suite Entry Notice Generator (Office Printer)</h1>
+    <button onclick="window.print()">Print Notice (Two per Page)</button>
+  </div>
+
+  <!-- Main Container -->
+  <div class="container">
+    <!-- Form Section -->
+    <div class="section">
+      <img src="https://i.postimg.cc/HW76hBDq/Gloucester-Logo.jpg" alt="The Gloucester on Yonge" 
+           style="display:block; margin:0 auto 20px; max-width:100px;">
+      <h2>Input Details</h2>
+      <!-- Form Start -->
+      <div class="form-group">
+        <label for="suite-number">Suite Number:</label>
+        <input type="text" id="suite-number" placeholder="e.g., 1205">
+      </div>
+      <div class="form-group">
+        <label for="entry-date">Date of Entry:</label>
+        <input type="date" id="entry-date">
+      </div>
+      <div class="form-group">
+        <label>Person(s) who entered the suite:</label>
+        <div class="checkbox-group">
+          <label><input type="checkbox" value="Security" id="security"> Security</label>
+          <label><input type="checkbox" value="Superintendent" class="personnel"> Superintendent</label>
+          <label><input type="checkbox" value="Management" class="personnel"> Management</label>
+          <label><input type="checkbox" value="Construction" class="personnel"> Construction</label>
+          <label><input type="checkbox" value="Other" id="other-personnel"> Other</label>
+        </div>
+      </div>
+      <!-- Guard Names -->
+      <div class="form-group hidden" id="guard-names-group">
+        <label for="guard-names">Select Guard Name:</label>
+        <select id="guard-names">
+          <option value="">Select Guard</option>
+          <option value="Ajaypreet">Ajaypreet</option>
+          <option value="Amritpal">Amritpal</option>
+          <option value="Meet">Meet</option>
+          <option value="Jatin">Jatin</option>
+          <option value="Praveen">Praveen</option>
+          <option value="Jashanpreet">Jashanpreet</option>
+          <option value="Arnav">Arnav</option>
+          <option value="Gurwinder">Gurwinder</option>
+          <option value="Others">Others</option>
+        </select>
+        <div class="form-group hidden" id="other-guard-group">
+          <label for="other-guard">Enter Guard's Name:</label>
+          <input type="text" id="other-guard" placeholder="Guard's Name">
+        </div>
+      </div>
+      <!-- Other Personnel -->
+      <div class="form-group hidden" id="other-personnel-group">
+        <label for="other-personnel-name">Specify:</label>
+        <input type="text" id="other-personnel-name" placeholder="Specify who entered">
+      </div>
+      <div class="form-group">
+        <label for="entry-type">Entry Type:</label>
+        <select id="entry-type">
+          <option value="">Select Entry Type</option>
+          <option value="Resident Permission">Resident Permission</option>
+          <option value="Emergency">Emergency</option>
+          <option value="Scheduled Maintenance">Scheduled Maintenance</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="nature-of-visit">Nature of Visit:</label>
+        <textarea id="nature-of-visit" rows="4" placeholder="Describe the nature of the visit"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Options:</label>
+        <div class="checkbox-group">
+          <label><input type="checkbox" id="work-completed"> Work Completed</label>
+          <label><input type="checkbox" id="work-pending"> Work Pending</label>
+          <label><input type="checkbox" id="contact-management"> Please Contact Property Management</label>
+        </div>
+      </div>
     </div>
-    <!-- Main Container -->
-    <div class="container">
-        <!-- Form Section -->
-        <div class="section">
-            <img src="https://i.postimg.cc/HW76hBDq/Gloucester-Logo.jpg" alt="Company Logo" style="display:block; margin:0 auto 20px; max-width:100px;">
-            <h2>Input Details</h2>
-            <!-- Form Start -->
-            <div class="form-group">
-                <label for="suite-number">Suite Number:</label>
-                <input type="text" id="suite-number" placeholder="e.g., 1205">
-            </div>
-            <div class="form-group">
-                <label for="entry-date">Date of Entry:</label>
-                <input type="date" id="entry-date">
-            </div>
-            <div class="form-group">
-                <label>Person(s) who entered the suite:</label>
-                <div class="checkbox-group">
-                    <label><input type="checkbox" value="Security" id="security"> Security</label>
-                    <label><input type="checkbox" value="Superintendent" class="personnel"> Superintendent</label>
-                    <label><input type="checkbox" value="Management" class="personnel"> Management</label>
-                    <label><input type="checkbox" value="Construction" class="personnel"> Construction</label>
-                    <label><input type="checkbox" value="Other" id="other-personnel"> Other</label>
-                </div>
-            </div>
-            <!-- Guard Names -->
-            <div class="form-group hidden" id="guard-names-group">
-                <label for="guard-names">Select Guard Name:</label>
-                <select id="guard-names">
-                    <option value="">Select Guard</option>
-                    <option value="Ajaypreet">Ajaypreet</option>
-                    <option value="Amritpal">Amritpal</option>
-                    <option value="Meet">Meet</option>
-                    <option value="Jatin">Jatin</option>
-                    <option value="Praveen">Praveen</option>
-                    <option value="Jashanpreet">Jashanpreet</option>
-                    <option value="Arnav">Arnav</option>
-                    <option value="Gurwinder">Gurwinder</option>
-                    <option value="Others">Others</option>
-                </select>
-                <div class="form-group hidden" id="other-guard-group">
-                    <label for="other-guard">Enter Guard's Name:</label>
-                    <input type="text" id="other-guard" placeholder="Guard's Name">
-                </div>
-            </div>
-            <!-- Other Personnel -->
-            <div class="form-group hidden" id="other-personnel-group">
-                <label for="other-personnel-name">Specify:</label>
-                <input type="text" id="other-personnel-name" placeholder="Specify who entered">
-            </div>
-            <div class="form-group">
-                <label for="entry-type">Entry Type:</label>
-                <select id="entry-type">
-                    <option value="">Select Entry Type</option>
-                    <option value="Resident Permission">Resident Permission</option>
-                    <option value="Emergency">Emergency</option>
-                    <option value="Scheduled Maintenance">Scheduled Maintenance</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="nature-of-visit">Nature of Visit:</label>
-                <textarea id="nature-of-visit" rows="4" placeholder="Describe the nature of the visit"></textarea>
-            </div>
-            <div class="form-group">
-                <label>Options:</label>
-                <div class="checkbox-group">
-                    <label><input type="checkbox" id="work-completed"> Work Completed</label>
-                    <label><input type="checkbox" id="work-pending"> Work Pending</label>
-                    <label><input type="checkbox" id="contact-management"> Please Contact Property Management</label>
-                </div>
-            </div>
+
+    <!-- Sample Preview Section -->
+    <div class="section">
+      <h2>Sample Notice</h2>
+      <div class="notice">
+        <img src="https://i.postimg.cc/HW76hBDq/Gloucester-Logo.jpg" alt="The Gloucester on Yonge">
+        <h2>SUITE ENTRY NOTICE</h2>
+        <div class="notice-content">
+          <p><strong>Date of Entry:</strong> ____________</p>
+          <p><strong>Suite Number:</strong> ____________</p>
+          <p><strong>Person(s) who entered:</strong></p>
+          <p>____________</p>
+          <p><strong>Entry Type:</strong> ____________</p>
+          <p><strong>Nature of Visit:</strong></p>
+          <p>____________</p>
+          <div class="options">
+            <span>☐ Work Completed</span>
+            <span>☐ Work Pending</span>
+            <span>☐ Please Contact Property Management</span>
+          </div>
         </div>
-        <!-- Sample Preview Section -->
-        <div class="section">
-            <h2>Sample Notice</h2>
-            <div class="notice">
-                <img src="https://i.postimg.cc/HW76hBDq/Gloucester-Logo.jpg" alt="Company Logo">
-                <h2>SUITE ENTRY NOTICE</h2>
-                <img src="https://i.postimg.cc/mkDBTJYy/SUITE-ENTRY-OFFICE.png" alt="Lock Icon">
-                <div class="notice-content">
-                    <p><strong>Date of Entry:</strong> ____________</p>
-                    <p><strong>Suite Number:</strong> ____________</p>
-                    <p><strong>Person(s) who entered:</strong></p>
-                    <p>____________</p>
-                    <p><strong>Entry Type:</strong> ____________</p>
-                    <p><strong>Nature of Visit:</strong></p>
-                    <p>____________</p>
-                    <div class="options">
-                        <span>☐ Work Completed</span>
-                        <span>☐ Work Pending</span>
-                        <span>☐ Please Contact Property Management</span>
-                    </div>
-                </div>
-                <div class="footer">
-                    Questions? Contact Property Management: 647-368-7395
-                </div>
-            </div>
+        <div class="footer">
+          Questions? Contact Property Management: 647-368-7395
         </div>
-        <!-- Notice Preview Section -->
-        <div class="section">
-            <h2>Notice Preview</h2>
-            <div class="notice" id="notice-preview">
-                <!-- Notice content will be injected here -->
-            </div>
-        </div>
+      </div>
     </div>
-    <!-- Printable Notices -->
-    <div class="printable" id="printable-notice" style="display:none;">
-        <!-- First Notice -->
-        <div class="notice" id="print-notice-1">
-            <!-- Notice content will be injected here -->
-        </div>
-        <div class="dotted-line"></div>
-        <!-- Second Notice (Duplicate) -->
-        <div class="notice" id="print-notice-2">
-            <!-- Notice content will be injected here -->
-        </div>
+
+    <!-- Notice Preview Section -->
+    <div class="section">
+      <h2>Notice Preview</h2>
+      <div class="notice" id="notice-preview">
+        <!-- Notice content will be injected here -->
+      </div>
     </div>
-    <!-- JavaScript -->
-    <script>
-        // Function to update the Notice Preview and Printable Notices
-        function updateNotice() {
-            // Get form values
-            const suiteNumber = document.getElementById('suite-number').value || '____________';
-            const entryDate = document.getElementById('entry-date').value || '____________';
-            const entryType = document.getElementById('entry-type').value || '____________';
-            const natureOfVisit = document.getElementById('nature-of-visit').value || '____________';
-            const workCompleted = document.getElementById('work-completed').checked ? '☑' : '☐';
-            const workPending = document.getElementById('work-pending').checked ? '☑' : '☐';
-            const contactManagement = document.getElementById('contact-management').checked ? '☑' : '☐';
+  </div>
 
-            // Get personnel who entered
-            let personnelList = [];
-            if (document.getElementById('security').checked) {
-                let guardName = document.getElementById('guard-names').value;
-                if (guardName === 'Others') {
-                    guardName = document.getElementById('other-guard').value || '____________';
-                }
-                guardName = guardName || '____________';
-                personnelList.push('Security (' + guardName + ')');
-            }
-            if (document.getElementById('other-personnel').checked) {
-                const otherPersonnel = document.getElementById('other-personnel-name').value || '____________';
-                personnelList.push(otherPersonnel);
-            }
-            const personnelCheckboxes = document.querySelectorAll('.personnel');
-            personnelCheckboxes.forEach(checkbox => {
-                if (checkbox.checked) {
-                    personnelList.push(checkbox.value);
-                }
-            });
-            if (personnelList.length === 0) {
-                personnelList.push('____________');
-            }
+  <!-- Printable Notices -->
+  <div class="printable" id="printable-notice" style="display:none;">
+    <!-- First Notice -->
+    <div class="notice" id="print-notice-1">
+      <!-- Notice content will be injected here -->
+    </div>
+    <div class="dotted-line"></div>
+    <!-- Second Notice (Duplicate) -->
+    <div class="notice" id="print-notice-2">
+      <!-- Notice content will be injected here -->
+    </div>
+  </div>
 
-            // Build the notice content
-            const noticeContent = `
-                <img src="https://i.postimg.cc/HW76hBDq/Gloucester-Logo.jpg" alt="Company Logo">
-                <h2>SUITE ENTRY NOTICE</h2>
-                <img src="https://i.postimg.cc/mkDBTJYy/SUITE-ENTRY-OFFICE.png" alt="Lock Icon">
-                <div class="notice-content">
-                    <p><strong>Date of Entry:</strong> ${entryDate}</p>
-                    <p><strong>Suite Number:</strong> ${suiteNumber}</p>
-                    <p><strong>Person(s) who entered:</strong></p>
-                    <p>${personnelList.join(', ')}</p>
-                    <p><strong>Entry Type:</strong> ${entryType}</p>
-                    <p><strong>Nature of Visit:</strong></p>
-                    <p>${natureOfVisit}</p>
-                    <div class="options">
-                        <span>${workCompleted} Work Completed</span>
-                        <span>${workPending} Work Pending</span>
-                        <span>${contactManagement} Please Contact Property Management</span>
-                    </div>
-                </div>
-                <div class="footer">
-                    Questions? Contact Property Management: 647-368-7395
-                </div>
-            `;
+  <!-- JavaScript -->
+  <script>
+    // Function to update the Notice Preview and Printable Notices
+    function updateNotice() {
+      // Get form values
+      const suiteNumber = document.getElementById('suite-number').value || '____________';
+      const entryDate = document.getElementById('entry-date').value || '____________';
+      const entryType = document.getElementById('entry-type').value || '____________';
+      const natureOfVisit = document.getElementById('nature-of-visit').value || '____________';
+      const workCompleted = document.getElementById('work-completed').checked ? '☑' : '☐';
+      const workPending = document.getElementById('work-pending').checked ? '☑' : '☐';
+      const contactManagement = document.getElementById('contact-management').checked ? '☑' : '☐';
 
-            // Update Notice Preview
-            document.getElementById('notice-preview').innerHTML = noticeContent;
-
-            // Update Printable Notices
-            document.getElementById('print-notice-1').innerHTML = noticeContent;
-            document.getElementById('print-notice-2').innerHTML = noticeContent;
+      // Get personnel who entered
+      let personnelList = [];
+      if (document.getElementById('security').checked) {
+        let guardName = document.getElementById('guard-names').value;
+        if (guardName === 'Others') {
+          guardName = document.getElementById('other-guard').value || '____________';
         }
-
-        // Event Listeners
-        document.querySelectorAll('input, select, textarea').forEach(element => {
-            element.addEventListener('input', updateNotice);
-            element.addEventListener('change', updateNotice);
-        });
-
-        // Show/Hide Guard Names
-        document.getElementById('security').addEventListener('change', function() {
-            const guardGroup = document.getElementById('guard-names-group');
-            if (this.checked) {
-                guardGroup.classList.remove('hidden');
-            } else {
-                guardGroup.classList.add('hidden');
-                document.getElementById('guard-names').value = '';
-                document.getElementById('other-guard-group').classList.add('hidden');
-                document.getElementById('other-guard').value = '';
-            }
-            updateNotice();
-        });
-
-        // Show/Hide Other Guard Name Input
-        document.getElementById('guard-names').addEventListener('change', function() {
-            const otherGuardGroup = document.getElementById('other-guard-group');
-            if (this.value === 'Others') {
-                otherGuardGroup.classList.remove('hidden');
-            } else {
-                otherGuardGroup.classList.add('hidden');
-                document.getElementById('other-guard').value = '';
-            }
-            updateNotice();
-        });
-
-        // Show/Hide Other Personnel Input
-        document.getElementById('other-personnel').addEventListener('change', function() {
-            const otherPersonnelGroup = document.getElementById('other-personnel-group');
-            if (this.checked) {
-                otherPersonnelGroup.classList.remove('hidden');
-            } else {
-                otherPersonnelGroup.classList.add('hidden');
-                document.getElementById('other-personnel-name').value = '';
-            }
-            updateNotice();
-        });
-
-        // Print Functionality
-        window.onbeforeprint = function() {
-            document.getElementById('printable-notice').style.display = 'block';
+        guardName = guardName || '____________';
+        personnelList.push('Security (' + guardName + ')');
+      }
+      if (document.getElementById('other-personnel').checked) {
+        const otherPersonnel = document.getElementById('other-personnel-name').value || '____________';
+        personnelList.push(otherPersonnel);
+      }
+      const personnelCheckboxes = document.querySelectorAll('.personnel');
+      personnelCheckboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+          personnelList.push(checkbox.value);
         }
-        window.onafterprint = function() {
-            document.getElementById('printable-notice').style.display = 'none';
-        }
+      });
+      if (personnelList.length === 0) {
+        personnelList.push('____________');
+      }
 
-        // Initial Call to Update Notice
-        updateNotice();
-    </script>
+      // Build the notice content (only one logo)
+      const noticeContent = `
+        <img src="https://i.postimg.cc/HW76hBDq/Gloucester-Logo.jpg" alt="The Gloucester on Yonge">
+        <h2>SUITE ENTRY NOTICE</h2>
+        <div class="notice-content">
+          <p><strong>Date of Entry:</strong> ${entryDate}</p>
+          <p><strong>Suite Number:</strong> ${suiteNumber}</p>
+          <p><strong>Person(s) who entered:</strong></p>
+          <p>${personnelList.join(', ')}</p>
+          <p><strong>Entry Type:</strong> ${entryType}</p>
+          <p><strong>Nature of Visit:</strong></p>
+          <p>${natureOfVisit}</p>
+          <div class="options">
+            <span>${workCompleted} Work Completed</span>
+            <span>${workPending} Work Pending</span>
+            <span>${contactManagement} Please Contact Property Management</span>
+          </div>
+        </div>
+        <div class="footer">
+          Questions? Contact Property Management: 647-368-7395
+        </div>
+      `;
+
+      // Update Notice Preview
+      document.getElementById('notice-preview').innerHTML = noticeContent;
+
+      // Update Printable Notices
+      document.getElementById('print-notice-1').innerHTML = noticeContent;
+      document.getElementById('print-notice-2').innerHTML = noticeContent;
+    }
+
+    // Event Listeners
+    document.querySelectorAll('input, select, textarea').forEach(element => {
+      // Consolidate to the 'input' event for text fields, date fields, checkboxes, etc.
+      element.addEventListener('input', updateNotice);
+    });
+
+    // Show/Hide Guard Names
+    document.getElementById('security').addEventListener('input', function() {
+      const guardGroup = document.getElementById('guard-names-group');
+      if (this.checked) {
+        guardGroup.classList.remove('hidden');
+      } else {
+        guardGroup.classList.add('hidden');
+        document.getElementById('guard-names').value = '';
+        document.getElementById('other-guard-group').classList.add('hidden');
+        document.getElementById('other-guard').value = '';
+      }
+      updateNotice();
+    });
+
+    // Show/Hide Other Guard Name Input
+    document.getElementById('guard-names').addEventListener('input', function() {
+      const otherGuardGroup = document.getElementById('other-guard-group');
+      if (this.value === 'Others') {
+        otherGuardGroup.classList.remove('hidden');
+      } else {
+        otherGuardGroup.classList.add('hidden');
+        document.getElementById('other-guard').value = '';
+      }
+      updateNotice();
+    });
+
+    // Show/Hide Other Personnel Input
+    document.getElementById('other-personnel').addEventListener('input', function() {
+      const otherPersonnelGroup = document.getElementById('other-personnel-group');
+      if (this.checked) {
+        otherPersonnelGroup.classList.remove('hidden');
+      } else {
+        otherPersonnelGroup.classList.add('hidden');
+        document.getElementById('other-personnel-name').value = '';
+      }
+      updateNotice();
+    });
+
+    // Print Functionality
+    window.onbeforeprint = function() {
+      document.getElementById('printable-notice').style.display = 'block';
+    }
+    window.onafterprint = function() {
+      document.getElementById('printable-notice').style.display = 'none';
+    }
+
+    // Initial Call to Update Notice
+    updateNotice();
+  </script>
 </body>
 </html>
