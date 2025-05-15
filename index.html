@@ -91,7 +91,7 @@ h3#pageSubtitle{
 .form-group {
     margin-bottom: 20px;
 }
-.form-group:last-of-type {
+.form-group:last-of-type { /* Last content group before action buttons */
     margin-bottom: 25px;
 }
 
@@ -246,10 +246,10 @@ button#clearFormButton:hover {
   background: var(--notice-bg);
   color: var(--notice-text);
   width: calc(190mm * var(--a4-scale-factor));
-  height: calc(126mm * var(--a4-scale-factor)); /* Adjusted for preview to reflect print */
+  height: calc(128mm * var(--a4-scale-factor));
   box-sizing: border-box;
-  padding: calc(4.5mm * var(--a4-scale-factor)); /* Adjusted for preview */
-  font-size: calc(7.8pt * var(--a4-scale-factor)); /* Adjusted for preview */
+  padding: calc(5mm * var(--a4-scale-factor));
+  font-size: calc(8pt * var(--a4-scale-factor));
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -258,14 +258,14 @@ button#clearFormButton:hover {
   font-weight:700;
   text-align:center;
   font-size: calc(1.3em * var(--a4-scale-factor));
-  padding: calc(1.5mm * var(--a4-scale-factor)) calc(3mm * var(--a4-scale-factor)) calc(2.5mm * var(--a4-scale-factor)); /* Adjusted */
+  padding: calc(1.5mm * var(--a4-scale-factor)) calc(3mm * var(--a4-scale-factor)) calc(3mm * var(--a4-scale-factor));
   border-bottom: 1px solid var(--notice-border);
 }
 .notice-on-a4 .sec{
-  padding: calc(1.8mm * var(--a4-scale-factor)) calc(3.5mm * var(--a4-scale-factor)); /* Adjusted */
+  padding: calc(2mm * var(--a4-scale-factor)) calc(4mm * var(--a4-scale-factor));
   border-bottom: 0.5px solid var(--notice-border);
   font-size: calc(1em * var(--a4-scale-factor));
-  line-height: 1.2; /* Adjusted */
+  line-height: 1.25;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
@@ -275,9 +275,9 @@ button#clearFormButton:hover {
 }
 .notice-on-a4 .lab{
     font-weight:600;
-    margin-bottom: calc(0.4mm * var(--a4-scale-factor)); /* Adjusted */
+    margin-bottom: calc(0.5mm * var(--a4-scale-factor));
     display: block;
-    margin-right: calc(1.8mm * var(--a4-scale-factor)); /* Adjusted */
+    margin-right: calc(2mm * var(--a4-scale-factor));
     flex-shrink: 0;
 }
 .notice-on-a4 .val{
@@ -290,23 +290,22 @@ button#clearFormButton:hover {
     color: #777;
 }
 .notice-on-a4 .chips-container, .notice-on-a4 .entry-type-options {
-    display:flex; flex-wrap:wrap; gap:calc(1.3mm * var(--a4-scale-factor)); margin-top:calc(0.4mm * var(--a4-scale-factor)); /* Adjusted */
+    display:flex; flex-wrap:wrap; gap:calc(1.5mm * var(--a4-scale-factor)); margin-top:calc(0.5mm * var(--a4-scale-factor));
     font-weight:normal;
-    font-size: calc(0.88em * var(--a4-scale-factor)); /* Adjusted */
+    font-size: calc(0.9em * var(--a4-scale-factor));
     flex-basis: 100%;
 }
 .notice-on-a4 .chip{
-  border:0.5px solid var(--notice-border); border-radius:calc(1.8px * var(--a4-scale-factor)); /* Adjusted */
-  padding:calc(0.4mm * var(--a4-scale-factor)) calc(1.3mm * var(--a4-scale-factor)); /* Adjusted */
+  border:0.5px solid var(--notice-border); border-radius:calc(2px * var(--a4-scale-factor));
+  padding:calc(0.5mm * var(--a4-scale-factor)) calc(1.5mm * var(--a4-scale-factor));
   background-color: #f0f0f0;
 }
 .notice-on-a4 .footer{
-  font-size: calc(0.8em * var(--a4-scale-factor)); /* Adjusted */
+  font-size: calc(0.8em * var(--a4-scale-factor));
   text-align:center;
   padding: calc(2mm * var(--a4-scale-factor)) calc(1mm * var(--a4-scale-factor)) calc(0.5mm * var(--a4-scale-factor));
   font-weight:600; border-top:1px solid var(--notice-border);
-  line-height:1.15; /* Adjusted */
-  margin-top: auto;
+  line-height:1.2; margin-top: auto;
   white-space: nowrap;
 }
 
@@ -320,7 +319,7 @@ button#clearFormButton:hover {
   }
   .notice-on-a4 {
     width: calc(190mm * 0.60 * var(--a4-scale-factor));
-    height: calc(126mm * 0.60 * var(--a4-scale-factor));
+    height: calc(128mm * 0.60 * var(--a4-scale-factor));
   }
 }
 @media(max-width:768px){
@@ -345,8 +344,8 @@ button#clearFormButton:hover {
   }
    .notice-on-a4 {
     width: calc(190mm * 0.40 * var(--a4-scale-factor));
-    height: calc(126mm * 0.40 * var(--a4-scale-factor));
-    font-size: calc(6.8pt * var(--a4-scale-factor)); /* Adjusted */
+    height: calc(128mm * 0.40 * var(--a4-scale-factor));
+    font-size: calc(7pt * var(--a4-scale-factor));
   }
 }
 
@@ -354,11 +353,7 @@ button#clearFormButton:hover {
 @media print{
   @page {
     size: A4 portrait;
-    margin: 5mm !important; /* Attempt to minimize OS margins */
-  }
-  html, body { /* Apply to html and body for print */
-    overflow: hidden !important; /* Prevent scrollbars that might affect layout */
-    height: 100% !important;
+    margin: 10mm;
   }
   body{
     background:#fff !important;
@@ -366,6 +361,7 @@ button#clearFormButton:hover {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
     width: auto;
+    height: auto;
     font-family: Arial, sans-serif !important;
   }
   h1, h3#pageSubtitle, .card, .form-actions, .a4-preview-container, .grid-container {
@@ -380,23 +376,23 @@ button#clearFormButton:hover {
   .notice-for-print {
     display: flex !important;
     flex-direction: column !important;
-    width: 190mm; /* Max width within typical A4 printable area */
-    height: 126mm; /* Further reduced height */
+    width: 190mm;
+    height: 128mm;
     border: 2px solid var(--notice-border) !important;
     background: var(--notice-bg) !important;
     color: var(--notice-text) !important;
-    padding: 4.5mm !important; /* Slightly reduced padding */
+    padding: 5mm !important;
     margin: 0 auto !important;
     box-sizing: border-box !important;
     page-break-inside: avoid !important;
-    font-size: 9pt !important; /* Slightly reduced base font for print */
-    line-height: 1.25 !important; /* Slightly reduced line height */
+    font-size: 9.25pt !important;
+    line-height: 1.3 !important;
   }
   .cut-line {
     display: flex !important;
     align-items: center;
     justify-content: center;
-    height: 9mm; /* Reduced gap */
+    height: 10mm;
     width: 190mm;
     margin: 0 auto !important;
     border-top: 1.5px dashed #555 !important;
@@ -413,7 +409,7 @@ button#clearFormButton:hover {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
-    margin-bottom: 1.5mm !important; /* Reduced */
+    margin-bottom: 2mm !important;
   }
   .notice-for-print .notice-header-print .notice-logo-print {
     max-width: 50mm !important;
@@ -424,29 +420,29 @@ button#clearFormButton:hover {
   .notice-for-print .title{
     font-weight: bold !important;
     text-align:center !important;
-    font-size: 1.35em !important; /* Reduced */
-    padding: 1mm 0 2.5mm 0 !important; /* Reduced */
-    margin-bottom: 2mm !important; /* Reduced */
+    font-size: 1.4em !important;
+    padding: 1.5mm 0 3mm 0 !important;
+    margin-bottom: 2.5mm !important;
     border-bottom: 2px solid var(--notice-border) !important;
     color: var(--notice-text) !important;
   }
   .notice-for-print .sec{
-    padding: 2mm 2mm !important; /* Reduced */
+    padding: 2.5mm 2mm !important;
     border-bottom: 1px solid var(--notice-secondary-border) !important;
     display: flex !important;
     align-items: flex-start;
     flex-wrap: wrap;
   }
-  .notice-for-print .sec.last-data-sec {
+  .notice-for-print .sec.last-data-sec { /* Remove border for the actual last data section */
      border-bottom: none !important;
   }
   .notice-for-print .lab{
     font-weight: bold !important;
-    margin-right: 7px !important; /* Reduced */
+    margin-right: 8px !important;
     font-size: 1em !important;
     color: var(--notice-text) !important;
     flex-shrink: 0;
-    padding-top: 0.4mm; /* Adjusted */
+    padding-top: 0.5mm;
   }
   .notice-for-print .val{
     word-break:break-word !important;
@@ -463,7 +459,7 @@ button#clearFormButton:hover {
   .notice-for-print .chips-container, .notice-for-print .entry-type-options-print {
     display:flex !important;
     flex-wrap:wrap !important;
-    gap: 2mm !important; /* Reduced */
+    gap: 2.5mm !important;
     margin-top:0mm !important;
     padding-left: 0;
     flex-basis: 100%;
@@ -472,19 +468,19 @@ button#clearFormButton:hover {
   .notice-for-print .chip{
     border:1px solid var(--notice-secondary-border) !important;
     border-radius:3px !important;
-    padding:0.7mm 1.8mm !important; /* Reduced */
-    font-size:0.82em !important; /* Reduced */
+    padding:0.8mm 2mm !important;
+    font-size:0.85em !important;
     background-color: #f0f0f0 !important;
     color: var(--notice-text) !important;
     white-space: nowrap;
   }
   .notice-for-print .footer{
-    font-size:0.78em !important; /* Further reduced for better fit */
+    font-size:0.8em !important;
     text-align:center !important;
     padding: 1.5mm 1mm 0.5mm 1mm !important;
     font-weight:bold !important;
     border-top:2px solid var(--notice-border) !important;
-    line-height:1.15 !important; /* Reduced */
+    line-height:1.2 !important;
     margin-top: auto !important;
     color: var(--notice-text) !important;
     white-space: nowrap !important;
@@ -602,6 +598,8 @@ const clearDateButton = $('#clearDateButton');
 const personOtherInput = $('#personOther');
 const entryTypeSelect = $('#entryType');
 const natureTextarea = $('#nature');
+// const customStatusInput = $('#customStatus'); // Removed
+// const propertyManagementInfoInput = $('#propertyManagementInfo'); // Removed
 const personsCheckboxes = $$('#personsRow input[name="person"]');
 const optionsCheckboxes = $$('#optionsRow input[name="option"]');
 
@@ -635,6 +633,8 @@ function getFormData() {
 
   const entryTypeSelectedValue = entryTypeSelect.value;
   const nature = natureTextarea.value.trim();
+  // const customStatus = customStatusInput.value.trim(); // Removed
+  // const propertyManagementInfo = propertyManagementInfoInput.value.trim(); // Removed
   
   return {
     buildingName: FIXED_BUILDING_NAME,
@@ -646,11 +646,14 @@ function getFormData() {
     personsWhoEntered,
     entryTypeSelectedValue,
     nature
+    // customStatus, // Removed
+    // propertyManagementInfo // Removed
   };
 }
 
 /**
  * Builds the HTML for "Work Status" chips.
+ * No longer takes customStatusText as it's removed.
  * @returns {string} HTML string for all chips.
  */
 function buildWorkStatusChips() {
@@ -658,6 +661,7 @@ function buildWorkStatusChips() {
     const checkboxState = cb.checked ? '☑' : '☐';
     return `<span class="chip">${checkboxState} ${cb.value}</span>`;
   }).join('');
+  // Custom status chip logic removed
   return chipsHtml;
 }
 
@@ -668,7 +672,7 @@ function buildWorkStatusChips() {
  * @returns {string} The HTML string for a notice.
  */
 function generateNoticeHTML(data, isForPrint = false) {
-  const workStatusChipsHtml = buildWorkStatusChips();
+  const workStatusChipsHtml = buildWorkStatusChips(); // No argument needed now
   const logoClass = isForPrint ? 'notice-logo-print' : 'notice-logo-preview';
   const headerContainerClass = isForPrint ? 'notice-header-print' : 'notice-header-preview';
   const logoHtml = data.logoUrl ? `<img src="${data.logoUrl}" alt="${data.buildingName} Logo" class="${logoClass}">` : '';
@@ -688,7 +692,8 @@ function generateNoticeHTML(data, isForPrint = false) {
   const timeDisplayHtml = `<span class="${timePlaceholderClass}">${data.entryTimeHHMM}</span>`;
   const footerText = `Questions? Call Property Management ${data.managementContact}`;
   
-  const workStatusSectionClass = isForPrint ? 'sec last-data-sec' : 'sec last-data-sec'; // Work status is always last data sec now
+  // The Work Status section is now always the last data section
+  const workStatusSectionClass = isForPrint ? 'sec last-data-sec' : 'sec';
 
 
   return `
@@ -753,6 +758,8 @@ function clearFormFields() {
     entryTypeSelect.value = '';
     natureTextarea.value = '';
     optionsCheckboxes.forEach(cb => cb.checked = false);
+    // customStatusInput.value = ''; // Removed
+    // propertyManagementInfoInput.value = ''; // Removed
     updateAllNotices();
 }
 
@@ -765,7 +772,7 @@ clearDateButton.addEventListener('click', () => {
 // Add event listeners for other inputs
 const allNoticeSpecificInputs = [
     suiteInput, entryDateInput,
-    personOtherInput, entryTypeSelect, natureTextarea,
+    personOtherInput, entryTypeSelect, natureTextarea, // customStatusInput, propertyManagementInfoInput removed
     ...personsCheckboxes, ...optionsCheckboxes
 ];
 
