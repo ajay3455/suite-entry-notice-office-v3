@@ -1,412 +1,796 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Suite Entry Notice Generator (Office Printer)</title>
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
-  <style>
-    /* Global Styles */
-    body {
-      margin: 0;
-      padding: 20px;
-      font-family: 'Roboto', sans-serif;
-      background: linear-gradient(135deg, #fff3e0, #ffe0b2);
-    }
-    /* Header Styles */
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    .header h1 {
-      color: #bf360c;
-      margin: 0;
-    }
-    .header button {
-      background-color: #ff7043;
-      color: #ffffff;
-      border: none;
-      padding: 12px 20px;
-      font-size: 16px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    .header button:hover {
-      background-color: #f4511e;
-    }
-    /* Container Styles */
-    .container {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      flex-wrap: wrap;
-    }
-    .section {
-      width: 100%;
-      max-width: 32%;
-      background-color: #ffffff;
-      padding: 15px;
-      border-radius: 12px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      box-sizing: border-box;
-      margin-bottom: 20px;
-    }
-    /* Responsive Adjustments */
-    @media (min-width: 768px) {
-      .section {
-        width: 32%;
-      }
-    }
-    /* Form Styles */
-    .form-group {
-      margin-bottom: 15px;
-    }
-    label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-    input[type="text"], input[type="date"], select, textarea {
-      width: 100%;
-      padding: 8px;
-      box-sizing: border-box;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    textarea {
-      resize: vertical;
-    }
-    .checkbox-group {
-      margin-left: 20px;
-    }
-    .checkbox-group label {
-      font-weight: normal;
-    }
-    .hidden {
-      display: none;
-    }
-    /* Notice Styles */
-    .notice {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .notice img {
-      max-width: 100px;
-      margin-bottom: 10px;
-    }
-    .notice h2 {
-      margin: 10px 0;
-      color: #bf360c;
-    }
-    .notice-content {
-      text-align: left;
-      margin: 20px 0;
-      font-size: 14px;
-    }
-    .notice-content p {
-      margin: 5px 0;
-    }
-    .options {
-      margin-top: 10px;
-    }
-    .options span {
-      display: block;
-    }
-    .footer {
-      text-align: center;
-      margin-top: 20px;
-      font-size: 0.9em;
-    }
-    /* Divider Line */
-    .dotted-line {
-      border-top: 1px dotted #000;
-      margin: 20px 0;
-    }
-    /* Print Styles */
-    @media print {
-      body {
-        margin: 0;
-        padding: 0;
-      }
-      .container, .header, .section, button {
-        display: none;
-      }
-      .printable {
-        display: block;
-        width: 100%;
-      }
-      .printable .notice {
-        page-break-inside: avoid;
-        margin: 0;
-        padding: 0;
-      }
-      .dotted-line {
-        border-top: 1px dotted #000;
-        margin: 20px 0;
-      }
-      @page {
-        size: A4 portrait;
-        margin: 10mm;
-      }
-      h1 {
-        display: none;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Gloucester Notice Generator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+/* ---------- Design Tokens (Purple Theme) ---------- */
+:root{
+  --font:'Inter',Arial,sans-serif;
+  --bg:#f5f3ff;
+  --card:#ffffffc0;
+  --accent:#6d28d9;
+  --accent2:#8b5cf6;
+  --txt:#1f2937;
+  --border:#ddd6fe;
+  --notice-bg: #fff;
+  --notice-border: #000; /* Primary border for print */
+  --notice-secondary-border: #333; /* Slightly lighter for internal lines */
+  --notice-text: #000;
+  --danger-bg: #fee2e2;
+  --danger-border: #fecaca;
+  --danger-text: #991b1b;
+  --button-secondary-bg: #e9d5ff;
+  --button-secondary-text: #5b21b6;
+  --button-secondary-border: #c084fc;
+
+
+  --a4-width-preview: 210mm;
+  --a4-height-preview: 297mm;
+  --a4-scale-factor: 0.8; /* Adjust for on-screen preview size */
+}
+
+/* ---------- Generic Reset & Base Styles ---------- */
+html,body{
+  margin:0;
+  padding:0;
+  background:var(--bg);
+  font-family:var(--font);
+  color:var(--txt);
+  line-height: 1.6;
+}
+
+/* ---------- Page Header ---------- */
+h1{
+  margin:22px 0 5px;
+  text-align:center;
+  font-size:1.8rem;
+  font-weight:700;
+  color:var(--accent);
+}
+h3#pageSubtitle{
+  margin:0 0 22px;
+  text-align:center;
+  font-weight:normal;
+  font-size:1rem;
+  color:var(--accent2);
+}
+
+/* ---------- Layout ---------- */
+.grid-container{
+  display:grid;
+  grid-template-columns: 45% 53%;
+  gap:2%;
+  width:96vw;
+  max-width:1200px;
+  margin:0 auto 46px;
+}
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:25px;
+  box-shadow:0 8px 26px #0000001a;
+  display:flex;
+  flex-direction:column;
+}
+.card h2{
+  margin:0 0 25px;
+  text-align:center;
+  font-size:1.2rem;
+  font-weight:700;
+  color:var(--accent);
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ---------- Form Controls ---------- */
+.form-group {
+    margin-bottom: 20px;
+}
+.form-group:last-of-type { /* Last content group before action buttons */
+    margin-bottom: 25px;
+}
+
+label{font-weight:600;font-size:.9rem; display: block; margin-bottom: 8px;}
+
+input[type="text"],
+input[type="date"],
+select,
+textarea{
+  width:100%;
+  padding:10px 12px;
+  margin:0 0 5px;
+  font-size:0.95rem;
+  border:1px solid var(--border);
+  border-radius:9px;
+  background:#fff;
+  color:var(--txt);
+  box-sizing:border-box;
+}
+input[type="text"]:focus,
+input[type="date"]:focus,
+select:focus,
+textarea:focus{
+  border-color:var(--accent);
+  outline:2px solid var(--accent2);
+  outline-offset: 0;
+}
+textarea{resize:vertical;min-height:60px}
+
+.checkbox-row {
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px 12px;
+  margin-top: 6px;
+}
+.checkbox-row label {
+  display:flex;
+  align-items:center;
+  font-size:.88rem;
+  padding:7px 11px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:#fafaff;
+  cursor:pointer;
+  font-weight:normal;
+  margin-bottom: 0;
+}
+.checkbox-row input[type="checkbox"] {
+  margin-right:6px;
+  accent-color:var(--accent);
+  width: auto;
+  margin-bottom: 0;
+}
+
+.input-with-clear-button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.input-with-clear-button input[type="date"] {
+    flex-grow: 1;
+}
+button.clear-input-button {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    background-color: var(--button-secondary-bg);
+    color: var(--button-secondary-text);
+    border: 1px solid var(--button-secondary-border);
+    border-radius: 8px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+button.clear-input-button:hover {
+    filter: brightness(0.95);
+}
+
+
+/* Buttons */
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+button.action-button {
+  padding:12px 20px;
+  font-size:1rem;
+  font-weight:700;
+  border:none;
+  border-radius:14px;
+  color:#fff;
+  cursor:pointer;
+  transition: filter 0.2s ease, background-color 0.2s ease;
+  min-width: 150px;
+}
+button#printButton{
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+}
+button#printButton:hover{filter:brightness(1.15)}
+
+button#clearFormButton {
+    background-color: var(--danger-bg);
+    color: var(--danger-text);
+    border: 1px solid var(--danger-border);
+}
+button#clearFormButton:hover {
+    background-color: #fca5a5;
+}
+
+/* ---------- Notice Header (Logo & Building Name) - For PREVIEW ---------- */
+.notice-header-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: calc(2.5mm * var(--a4-scale-factor));
+}
+.notice-logo-preview {
+    max-width: calc(55mm * var(--a4-scale-factor));
+    max-height: calc(18mm * var(--a4-scale-factor));
+    margin-bottom: calc(1.5mm * var(--a4-scale-factor));
+    object-fit: contain;
+}
+
+/* ---------- A4 Preview Area ---------- */
+.a4-preview-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 15px;
+  background-color: #e0e0e0;
+  border-radius: 10px;
+  overflow: auto;
+  height: 100%;
+  box-sizing: border-box;
+}
+.a4-sheet-preview {
+  background-color: white;
+  width: calc(var(--a4-width-preview) * var(--a4-scale-factor));
+  height: calc(var(--a4-height-preview) * var(--a4-scale-factor));
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  padding: calc(10mm * var(--a4-scale-factor));
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.notice-on-a4 {
+  border: 1px solid var(--notice-border);
+  background: var(--notice-bg);
+  color: var(--notice-text);
+  width: calc(190mm * var(--a4-scale-factor));
+  height: calc(128mm * var(--a4-scale-factor));
+  box-sizing: border-box;
+  padding: calc(5mm * var(--a4-scale-factor));
+  font-size: calc(8pt * var(--a4-scale-factor));
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.notice-on-a4 .title{
+  font-weight:700;
+  text-align:center;
+  font-size: calc(1.3em * var(--a4-scale-factor));
+  padding: calc(1.5mm * var(--a4-scale-factor)) calc(3mm * var(--a4-scale-factor)) calc(3mm * var(--a4-scale-factor));
+  border-bottom: 1px solid var(--notice-border);
+}
+.notice-on-a4 .sec{
+  padding: calc(2mm * var(--a4-scale-factor)) calc(4mm * var(--a4-scale-factor));
+  border-bottom: 0.5px solid var(--notice-border);
+  font-size: calc(1em * var(--a4-scale-factor));
+  line-height: 1.25;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+.notice-on-a4 .sec.last-data-sec {
+    border-bottom: none;
+}
+.notice-on-a4 .lab{
+    font-weight:600;
+    margin-bottom: calc(0.5mm * var(--a4-scale-factor));
+    display: block;
+    margin-right: calc(2mm * var(--a4-scale-factor));
+    flex-shrink: 0;
+}
+.notice-on-a4 .val{
+    word-break:break-word;
+    flex-grow: 1;
+}
+.notice-on-a4 .time-placeholder {
+    font-family: monospace;
+    letter-spacing: 1px;
+    color: #777;
+}
+.notice-on-a4 .chips-container, .notice-on-a4 .entry-type-options {
+    display:flex; flex-wrap:wrap; gap:calc(1.5mm * var(--a4-scale-factor)); margin-top:calc(0.5mm * var(--a4-scale-factor));
+    font-weight:normal;
+    font-size: calc(0.9em * var(--a4-scale-factor));
+    flex-basis: 100%;
+}
+.notice-on-a4 .chip{
+  border:0.5px solid var(--notice-border); border-radius:calc(2px * var(--a4-scale-factor));
+  padding:calc(0.5mm * var(--a4-scale-factor)) calc(1.5mm * var(--a4-scale-factor));
+  background-color: #f0f0f0;
+}
+.notice-on-a4 .footer{
+  font-size: calc(0.8em * var(--a4-scale-factor));
+  text-align:center;
+  padding: calc(2mm * var(--a4-scale-factor)) calc(1mm * var(--a4-scale-factor)) calc(0.5mm * var(--a4-scale-factor));
+  font-weight:600; border-top:1px solid var(--notice-border);
+  line-height:1.2; margin-top: auto;
+  white-space: nowrap;
+}
+
+/* ---------- Responsive Adjustments ---------- */
+@media(max-width:1024px){
+  .grid-container{ grid-template-columns:1fr; gap: 25px; }
+  .a4-sheet-preview {
+    width: calc(var(--a4-width-preview) * 0.60 * var(--a4-scale-factor));
+    height: calc(var(--a4-height-preview) * 0.60 * var(--a4-scale-factor));
+    padding: calc(8mm * 0.60 * var(--a4-scale-factor));
+  }
+  .notice-on-a4 {
+    width: calc(190mm * 0.60 * var(--a4-scale-factor));
+    height: calc(128mm * 0.60 * var(--a4-scale-factor));
+  }
+}
+@media(max-width:768px){
+  h1 { font-size: 1.5rem; }
+  h3#pageSubtitle { font-size: 0.9rem; }
+  .card { padding: 15px; }
+  .card h2 { font-size: 1.05rem; }
+  label { font-size: 0.85rem; }
+  input[type="text"], input[type="date"], select, textarea {
+    padding: 8px 10px; font-size: 0.9rem; margin-bottom: 12px;
+  }
+  .checkbox-row label { padding: 5px 8px; font-size: 0.82rem; }
+  .form-actions { flex-direction: column; align-items: center;}
+  button.action-button, button.clear-input-button { width: 90%; max-width: 250px; padding: 10px; font-size: 0.95rem; }
+  .input-with-clear-button { flex-direction: column; align-items: stretch; }
+  .input-with-clear-button input[type="date"] { margin-bottom: 8px; }
+
+  .a4-sheet-preview {
+    width: calc(var(--a4-width-preview) * 0.40 * var(--a4-scale-factor));
+    height: calc(var(--a4-height-preview) * 0.40 * var(--a4-scale-factor));
+    padding: calc(5mm * 0.40 * var(--a4-scale-factor));
+  }
+   .notice-on-a4 {
+    width: calc(190mm * 0.40 * var(--a4-scale-factor));
+    height: calc(128mm * 0.40 * var(--a4-scale-factor));
+    font-size: calc(7pt * var(--a4-scale-factor));
+  }
+}
+
+/* ---------- PRINT Styles - Enhanced for better look ---------- */
+@media print{
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
+  }
+  body{
+    background:#fff !important;
+    color:var(--notice-text) !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    width: auto;
+    height: auto;
+    font-family: Arial, sans-serif !important;
+  }
+  h1, h3#pageSubtitle, .card, .form-actions, .a4-preview-container, .grid-container {
+    display:none !important;
+  }
+  .print-area {
+    display: block !important;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  .notice-for-print {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 190mm;
+    height: 128mm;
+    border: 2px solid var(--notice-border) !important;
+    background: var(--notice-bg) !important;
+    color: var(--notice-text) !important;
+    padding: 5mm !important;
+    margin: 0 auto !important;
+    box-sizing: border-box !important;
+    page-break-inside: avoid !important;
+    font-size: 9.25pt !important;
+    line-height: 1.3 !important;
+  }
+  .cut-line {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    height: 10mm;
+    width: 190mm;
+    margin: 0 auto !important;
+    border-top: 1.5px dashed #555 !important;
+    border-bottom: 1.5px dashed #555 !important;
+    box-sizing: border-box;
+    font-size: 8pt !important;
+    color: #555 !important;
+  }
+  .cut-line .scissor-icon {
+      margin: 0 10px;
+      font-size: 12pt;
+  }
+  .notice-for-print .notice-header-print {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    margin-bottom: 2mm !important;
+  }
+  .notice-for-print .notice-header-print .notice-logo-print {
+    max-width: 50mm !important;
+    max-height: 14mm !important;
+    margin-bottom: 1mm !important;
+    object-fit: contain !important;
+  }
+  .notice-for-print .title{
+    font-weight: bold !important;
+    text-align:center !important;
+    font-size: 1.4em !important;
+    padding: 1.5mm 0 3mm 0 !important;
+    margin-bottom: 2.5mm !important;
+    border-bottom: 2px solid var(--notice-border) !important;
+    color: var(--notice-text) !important;
+  }
+  .notice-for-print .sec{
+    padding: 2.5mm 2mm !important;
+    border-bottom: 1px solid var(--notice-secondary-border) !important;
+    display: flex !important;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .notice-for-print .sec.last-data-sec { /* Remove border for the actual last data section */
+     border-bottom: none !important;
+  }
+  .notice-for-print .lab{
+    font-weight: bold !important;
+    margin-right: 8px !important;
+    font-size: 1em !important;
+    color: var(--notice-text) !important;
+    flex-shrink: 0;
+    padding-top: 0.5mm;
+  }
+  .notice-for-print .val{
+    word-break:break-word !important;
+    text-align: left;
+    flex-grow: 1;
+    font-size: 1em !important;
+    color: var(--notice-text) !important;
+  }
+  .notice-for-print .time-placeholder-print {
+    font-family: monospace !important;
+    letter-spacing: 1px !important;
+    color: #333 !important;
+  }
+  .notice-for-print .chips-container, .notice-for-print .entry-type-options-print {
+    display:flex !important;
+    flex-wrap:wrap !important;
+    gap: 2.5mm !important;
+    margin-top:0mm !important;
+    padding-left: 0;
+    flex-basis: 100%;
+    flex-grow: 1;
+  }
+  .notice-for-print .chip{
+    border:1px solid var(--notice-secondary-border) !important;
+    border-radius:3px !important;
+    padding:0.8mm 2mm !important;
+    font-size:0.85em !important;
+    background-color: #f0f0f0 !important;
+    color: var(--notice-text) !important;
+    white-space: nowrap;
+  }
+  .notice-for-print .footer{
+    font-size:0.8em !important;
+    text-align:center !important;
+    padding: 1.5mm 1mm 0.5mm 1mm !important;
+    font-weight:bold !important;
+    border-top:2px solid var(--notice-border) !important;
+    line-height:1.2 !important;
+    margin-top: auto !important;
+    color: var(--notice-text) !important;
+    white-space: nowrap !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+}
+</style>
 </head>
 <body>
-  <!-- Header -->
-  <div class="header">
-    <h1>Suite Entry Notice Generator (Office Printer)</h1>
-    <button onclick="window.print()">Print Notice (Two per Page)</button>
-  </div>
 
-  <!-- Main Container -->
-  <div class="container">
-    <!-- Form Section -->
-    <div class="section">
-      <img src="https://i.postimg.cc/HW76hBDq/Gloucester-Logo.jpg" alt="The Gloucester on Yonge" 
-           style="display:block; margin:0 auto 20px; max-width:100px;">
-      <h2>Input Details</h2>
-      <!-- Form Start -->
-      <div class="form-group">
-        <label for="suite-number">Suite Number:</label>
-        <input type="text" id="suite-number" placeholder="e.g., 1205">
-      </div>
-      <div class="form-group">
-        <label for="entry-date">Date of Entry:</label>
-        <input type="date" id="entry-date">
-      </div>
-      <div class="form-group">
-        <label>Person(s) who entered the suite:</label>
-        <div class="checkbox-group">
-          <label><input type="checkbox" value="Security" id="security"> Security</label>
-          <label><input type="checkbox" value="Superintendent" class="personnel"> Superintendent</label>
-          <label><input type="checkbox" value="Management" class="personnel"> Management</label>
-          <label><input type="checkbox" value="Construction" class="personnel"> Construction</label>
-          <label><input type="checkbox" value="Other" id="other-personnel"> Other</label>
-        </div>
-      </div>
-      <!-- Guard Names -->
-      <div class="form-group hidden" id="guard-names-group">
-        <label for="guard-names">Select Guard Name:</label>
-        <select id="guard-names">
-          <option value="">Select Guard</option>
-          <option value="Ajaypreet">Ajaypreet</option>
-          <option value="Amritpal">Amritpal</option>
-          <option value="Meet">Meet</option>
-          <option value="Jatin">Jatin</option>
-          <option value="Praveen">Praveen</option>
-          <option value="Jashanpreet">Jashanpreet</option>
-          <option value="Arnav">Arnav</option>
-          <option value="Gurwinder">Gurwinder</option>
-          <option value="Others">Others</option>
-        </select>
-        <div class="form-group hidden" id="other-guard-group">
-          <label for="other-guard">Enter Guard's Name:</label>
-          <input type="text" id="other-guard" placeholder="Guard's Name">
-        </div>
-      </div>
-      <!-- Other Personnel -->
-      <div class="form-group hidden" id="other-personnel-group">
-        <label for="other-personnel-name">Specify:</label>
-        <input type="text" id="other-personnel-name" placeholder="Specify who entered">
-      </div>
-      <div class="form-group">
-        <label for="entry-type">Entry Type:</label>
-        <select id="entry-type">
-          <option value="">Select Entry Type</option>
-          <option value="Resident Permission">Resident Permission</option>
-          <option value="Emergency">Emergency</option>
-          <option value="Scheduled Maintenance">Scheduled Maintenance</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="nature-of-visit">Nature of Visit:</label>
-        <textarea id="nature-of-visit" rows="4" placeholder="Describe the nature of the visit"></textarea>
-      </div>
-      <div class="form-group">
-        <label>Options:</label>
-        <div class="checkbox-group">
-          <label><input type="checkbox" id="work-completed"> Work Completed</label>
-          <label><input type="checkbox" id="work-pending"> Work Pending</label>
-          <label><input type="checkbox" id="contact-management"> Please Contact Property Management</label>
-        </div>
+<h1>Gloucester Notice Generator</h1>
+<h3 id="pageSubtitle">(Generates two notices per A4 sheet)</h3>
+
+<div class="grid-container">
+  <div class="card form-card">
+    <h2>Fill Notice Details</h2>
+    <div class="form-group">
+      <label for="suite">Suite Number</label>
+      <input type="text" id="suite">
+    </div>
+
+    <div class="form-group">
+      <label for="entryDate">Date of Entry</label>
+      <div class="input-with-clear-button">
+        <input type="date" id="entryDate">
+        <button type="button" id="clearDateButton" class="clear-input-button" title="Clear Date">Clear Date</button>
       </div>
     </div>
 
-    <!-- Sample Preview Section -->
-    <div class="section">
-      <h2>Sample Notice</h2>
-      <div class="notice">
-        <img src="https://i.postimg.cc/HW76hBDq/Gloucester-Logo.jpg" alt="The Gloucester on Yonge">
-        <h2>SUITE ENTRY NOTICE</h2>
-        <div class="notice-content">
-          <p><strong>Date of Entry:</strong> ____________</p>
-          <p><strong>Suite Number:</strong> ____________</p>
-          <p><strong>Person(s) who entered:</strong></p>
-          <p>____________</p>
-          <p><strong>Entry Type:</strong> ____________</p>
-          <p><strong>Nature of Visit:</strong></p>
-          <p>____________</p>
-          <div class="options">
-            <span>☐ Work Completed</span>
-            <span>☐ Work Pending</span>
-            <span>☐ Please Contact Property Management</span>
-          </div>
+    <div class="form-group">
+        <label>Time of Entry</label>
         </div>
-        <div class="footer">
-          Questions? Contact Property Management: 647-368-7395
-        </div>
+
+
+    <div class="form-group">
+      <label>Person(s) who entered</label>
+      <div class="checkbox-row" id="personsRow">
+        <label><input type="checkbox" value="Security" name="person">Security</label>
+        <label><input type="checkbox" value="Superintendent" name="person">Superintendent</label>
+        <label><input type="checkbox" value="Management" name="person">Management</label>
+        <label><input type="checkbox" value="Construction" name="person">Construction</label>
       </div>
+      <input type="text" id="personOther" placeholder="Specify other person(s)" style="margin-top: 6px;">
     </div>
 
-    <!-- Notice Preview Section -->
-    <div class="section">
-      <h2>Notice Preview</h2>
-      <div class="notice" id="notice-preview">
-        <!-- Notice content will be injected here -->
+    <div class="form-group">
+      <label for="entryType">Entry Type (select or leave for manual tick on notice)</label>
+      <select id="entryType">
+        <option value="">-- Select for printed text OR leave blank for checkboxes --</option>
+        <option value="Resident Permission">Resident Permission</option>
+        <option value="Emergency">Emergency</option>
+        <option value="Scheduled Maintenance">Scheduled Maintenance</option>
+        <option value="Welfare Check">Welfare Check</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="nature">Nature of Visit / Reason for Entry</label>
+      <textarea id="nature"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Work Status</label>
+      <div class="checkbox-row" id="optionsRow">
+        <label><input type="checkbox" value="Work Completed" name="option">Work Completed</label>
+        <label><input type="checkbox" value="Work Pending" name="option">Work Pending</label>
+        <label><input type="checkbox" value="Follow-up Required" name="option">Follow-up Required</label>
+        <label><input type="checkbox" value="Contact Management" name="option">Please Contact Management</label>
       </div>
+    </div>
+    <div class="form-actions">
+        <button id="printButton" type="button" class="action-button">🖨️ Print Notices</button>
+        <button id="clearFormButton" type="button" class="action-button">🧹 Clear Form</button>
     </div>
   </div>
 
-  <!-- Printable Notices -->
-  <div class="printable" id="printable-notice" style="display:none;">
-    <!-- First Notice -->
-    <div class="notice" id="print-notice-1">
-      <!-- Notice content will be injected here -->
-    </div>
-    <div class="dotted-line"></div>
-    <!-- Second Notice (Duplicate) -->
-    <div class="notice" id="print-notice-2">
-      <!-- Notice content will be injected here -->
+  <div class="card preview-card">
+    <h2>A4 Page Preview</h2>
+    <div class="a4-preview-container">
+      <div class="a4-sheet-preview">
+        <div id="noticePreview1" class="notice-on-a4"></div>
+        <div id="noticePreview2" class="notice-on-a4"></div>
+      </div>
     </div>
   </div>
+</div>
 
-  <!-- JavaScript -->
-  <script>
-    // Function to update the Notice Preview and Printable Notices
-    function updateNotice() {
-      // Get form values
-      const suiteNumber = document.getElementById('suite-number').value || '____________';
-      const entryDate = document.getElementById('entry-date').value || '____________';
-      const entryType = document.getElementById('entry-type').value || '____________';
-      const natureOfVisit = document.getElementById('nature-of-visit').value || '____________';
-      const workCompleted = document.getElementById('work-completed').checked ? '☑' : '☐';
-      const workPending = document.getElementById('work-pending').checked ? '☑' : '☐';
-      const contactManagement = document.getElementById('contact-management').checked ? '☑' : '☐';
+<div class="print-area" style="display:none;">
+  <div id="noticePrint1" class="notice-for-print"></div>
+  <div class="cut-line">
+      <span class="scissor-icon">✂️</span>&nbsp; Cut Here &nbsp;<span class="scissor-icon">✂️</span>
+  </div>
+  <div id="noticePrint2" class="notice-for-print"></div>
+</div>
 
-      // Get personnel who entered
-      let personnelList = [];
-      if (document.getElementById('security').checked) {
-        let guardName = document.getElementById('guard-names').value;
-        if (guardName === 'Others') {
-          guardName = document.getElementById('other-guard').value || '____________';
-        }
-        guardName = guardName || '____________';
-        personnelList.push('Security (' + guardName + ')');
+<script>
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+
+// Fixed details
+const FIXED_BUILDING_NAME = "The Gloucester on Yonge";
+const FIXED_CONTACT_INFO = "647-368-7395";
+const FIXED_LOGO_URL = "https://i.postimg.cc/Xv23sJ1M/Gloucester-on-young-transparent-LOGO.png";
+const STANDARD_ENTRY_TYPES = [
+    "Resident Permission", "Emergency", "Scheduled Maintenance", "Welfare Check"
+];
+
+// Form element references
+const suiteInput = $('#suite');
+const entryDateInput = $('#entryDate');
+const clearDateButton = $('#clearDateButton');
+const personOtherInput = $('#personOther');
+const entryTypeSelect = $('#entryType');
+const natureTextarea = $('#nature');
+// const customStatusInput = $('#customStatus'); // Removed
+// const propertyManagementInfoInput = $('#propertyManagementInfo'); // Removed
+const personsCheckboxes = $$('#personsRow input[name="person"]');
+const optionsCheckboxes = $$('#optionsRow input[name="option"]');
+
+/**
+ * Gathers all data from the form.
+ * @returns {object} An object containing all form field values.
+ */
+function getFormData() {
+  const suite = suiteInput.value.trim();
+  const entryDateRaw = entryDateInput.value;
+  let entryDateFormatted = "____";
+
+  if (entryDateRaw) {
+      try {
+        const dateObj = new Date(entryDateRaw + 'T00:00:00');
+        entryDateFormatted = dateObj.toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' });
+      } catch (e) {
+        console.error("Error formatting date:", e);
+        entryDateFormatted = entryDateRaw + " (Invalid Date)";
       }
-      if (document.getElementById('other-personnel').checked) {
-        const otherPersonnel = document.getElementById('other-personnel-name').value || '____________';
-        personnelList.push(otherPersonnel);
-      }
-      const personnelCheckboxes = document.querySelectorAll('.personnel');
-      personnelCheckboxes.forEach(checkbox => {
-        if (checkbox.checked) {
-          personnelList.push(checkbox.value);
-        }
-      });
-      if (personnelList.length === 0) {
-        personnelList.push('____________');
-      }
+  }
 
-      // Build the notice content (only one logo)
-      const noticeContent = `
-        <img src="https://i.postimg.cc/HW76hBDq/Gloucester-Logo.jpg" alt="The Gloucester on Yonge">
-        <h2>SUITE ENTRY NOTICE</h2>
-        <div class="notice-content">
-          <p><strong>Date of Entry:</strong> ${entryDate}</p>
-          <p><strong>Suite Number:</strong> ${suiteNumber}</p>
-          <p><strong>Person(s) who entered:</strong></p>
-          <p>${personnelList.join(', ')}</p>
-          <p><strong>Entry Type:</strong> ${entryType}</p>
-          <p><strong>Nature of Visit:</strong></p>
-          <p>${natureOfVisit}</p>
-          <div class="options">
-            <span>${workCompleted} Work Completed</span>
-            <span>${workPending} Work Pending</span>
-            <span>${contactManagement} Please Contact Property Management</span>
-          </div>
-        </div>
-        <div class="footer">
-          Questions? Contact Property Management: 647-368-7395
-        </div>
-      `;
+  const entryTimeHHMM = "____:____";
 
-      // Update Notice Preview
-      document.getElementById('notice-preview').innerHTML = noticeContent;
+  const personsChecked = personsCheckboxes.filter(cb => cb.checked).map(cb => cb.value);
+  const personOther = personOtherInput.value.trim();
+  if (personOther) {
+      personsChecked.push(personOther);
+  }
+  const personsWhoEntered = personsChecked.length > 0 ? personsChecked.join(', ') : '____';
 
-      // Update Printable Notices
-      document.getElementById('print-notice-1').innerHTML = noticeContent;
-      document.getElementById('print-notice-2').innerHTML = noticeContent;
-    }
+  const entryTypeSelectedValue = entryTypeSelect.value;
+  const nature = natureTextarea.value.trim();
+  // const customStatus = customStatusInput.value.trim(); // Removed
+  // const propertyManagementInfo = propertyManagementInfoInput.value.trim(); // Removed
+  
+  return {
+    buildingName: FIXED_BUILDING_NAME,
+    managementContact: FIXED_CONTACT_INFO,
+    logoUrl: FIXED_LOGO_URL,
+    suite,
+    entryDateFormatted,
+    entryTimeHHMM,
+    personsWhoEntered,
+    entryTypeSelectedValue,
+    nature
+    // customStatus, // Removed
+    // propertyManagementInfo // Removed
+  };
+}
 
-    // Event Listeners
-    document.querySelectorAll('input, select, textarea').forEach(element => {
-      // Consolidate to the 'input' event for text fields, date fields, checkboxes, etc.
-      element.addEventListener('input', updateNotice);
-    });
+/**
+ * Builds the HTML for "Work Status" chips.
+ * No longer takes customStatusText as it's removed.
+ * @returns {string} HTML string for all chips.
+ */
+function buildWorkStatusChips() {
+  let chipsHtml = optionsCheckboxes.map(cb => {
+    const checkboxState = cb.checked ? '☑' : '☐';
+    return `<span class="chip">${checkboxState} ${cb.value}</span>`;
+  }).join('');
+  // Custom status chip logic removed
+  return chipsHtml;
+}
 
-    // Show/Hide Guard Names
-    document.getElementById('security').addEventListener('input', function() {
-      const guardGroup = document.getElementById('guard-names-group');
-      if (this.checked) {
-        guardGroup.classList.remove('hidden');
-      } else {
-        guardGroup.classList.add('hidden');
-        document.getElementById('guard-names').value = '';
-        document.getElementById('other-guard-group').classList.add('hidden');
-        document.getElementById('other-guard').value = '';
-      }
-      updateNotice();
-    });
+/**
+ * Generates the complete HTML content for a single notice.
+ * @param {object} data - The form data object from getFormData().
+ * @param {boolean} isForPrint - Determines if styling is for print or preview.
+ * @returns {string} The HTML string for a notice.
+ */
+function generateNoticeHTML(data, isForPrint = false) {
+  const workStatusChipsHtml = buildWorkStatusChips(); // No argument needed now
+  const logoClass = isForPrint ? 'notice-logo-print' : 'notice-logo-preview';
+  const headerContainerClass = isForPrint ? 'notice-header-print' : 'notice-header-preview';
+  const logoHtml = data.logoUrl ? `<img src="${data.logoUrl}" alt="${data.buildingName} Logo" class="${logoClass}">` : '';
+  
+  const timePlaceholderClass = isForPrint ? 'time-placeholder-print' : 'time-placeholder';
+  const chipsContainerClass = 'chips-container';
+  const entryTypeOptionsClass = isForPrint ? 'entry-type-options-print' : 'entry-type-options';
 
-    // Show/Hide Other Guard Name Input
-    document.getElementById('guard-names').addEventListener('input', function() {
-      const otherGuardGroup = document.getElementById('other-guard-group');
-      if (this.value === 'Others') {
-        otherGuardGroup.classList.remove('hidden');
-      } else {
-        otherGuardGroup.classList.add('hidden');
-        document.getElementById('other-guard').value = '';
-      }
-      updateNotice();
-    });
+  let entryTypeDisplayHtml;
+  if (data.entryTypeSelectedValue) {
+    entryTypeDisplayHtml = `<div class="val">${data.entryTypeSelectedValue}</div>`;
+  } else {
+    let entryCheckboxesHtml = STANDARD_ENTRY_TYPES.map(type => `<span class="chip">☐ ${type}</span>`).join('');
+    entryTypeDisplayHtml = `<div class="${chipsContainerClass} ${entryTypeOptionsClass}">${entryCheckboxesHtml}</div>`;
+  }
 
-    // Show/Hide Other Personnel Input
-    document.getElementById('other-personnel').addEventListener('input', function() {
-      const otherPersonnelGroup = document.getElementById('other-personnel-group');
-      if (this.checked) {
-        otherPersonnelGroup.classList.remove('hidden');
-      } else {
-        otherPersonnelGroup.classList.add('hidden');
-        document.getElementById('other-personnel-name').value = '';
-      }
-      updateNotice();
-    });
+  const timeDisplayHtml = `<span class="${timePlaceholderClass}">${data.entryTimeHHMM}</span>`;
+  const footerText = `Questions? Call Property Management ${data.managementContact}`;
+  
+  // The Work Status section is now always the last data section
+  const workStatusSectionClass = isForPrint ? 'sec last-data-sec' : 'sec';
 
-    // Print Functionality
-    window.onbeforeprint = function() {
-      document.getElementById('printable-notice').style.display = 'block';
-    }
-    window.onafterprint = function() {
-      document.getElementById('printable-notice').style.display = 'none';
-    }
 
-    // Initial Call to Update Notice
-    updateNotice();
-  </script>
+  return `
+    <div class="${headerContainerClass}">
+      ${logoHtml}
+    </div>
+    <div class="title">SUITE ENTRY NOTICE</div>
+    <div class="sec">
+        <div class="lab">Date of Entry:</div>
+        <div class="val">${data.entryDateFormatted}</div>
+    </div>
+    <div class="sec">
+        <div class="lab">Time of Entry:</div>
+        <div class="val">${timeDisplayHtml}</div>
+    </div>
+    <div class="sec">
+        <div class="lab">Suite Number:</div>
+        <div class="val">${data.suite || '____'}</div>
+    </div>
+    <div class="sec">
+        <div class="lab">Person(s) Who Entered:</div>
+        <div class="val">${data.personsWhoEntered}</div>
+    </div>
+    <div class="sec">
+        <div class="lab">Entry Type:</div>
+        ${entryTypeDisplayHtml}
+    </div>
+    <div class="sec">
+        <div class="lab">Nature of Visit / Reason:</div>
+        <div class="val">${data.nature || '____'}</div>
+    </div>
+    <div class="${workStatusSectionClass}"> <div class="lab">Work Status:</div>
+        <div class="${chipsContainerClass}">${workStatusChipsHtml}</div>
+    </div>
+    <div class="footer">${footerText}</div>
+  `;
+}
+
+/**
+ * Updates all notice previews and the hidden print areas.
+ */
+function updateAllNotices() {
+  const formData = getFormData();
+  const noticeContentPreviewHTML = generateNoticeHTML(formData, false);
+  const noticeContentPrintHTML = generateNoticeHTML(formData, true);
+
+  $('#noticePreview1').innerHTML = noticeContentPreviewHTML;
+  $('#noticePreview2').innerHTML = noticeContentPreviewHTML;
+
+  $('#noticePrint1').innerHTML = noticeContentPrintHTML;
+  $('#noticePrint2').innerHTML = noticeContentPrintHTML;
+}
+
+/**
+ * Clears all notice-specific form fields.
+ */
+function clearFormFields() {
+    suiteInput.value = '';
+    entryDateInput.value = '';
+    personsCheckboxes.forEach(cb => cb.checked = false);
+    personOtherInput.value = '';
+    entryTypeSelect.value = '';
+    natureTextarea.value = '';
+    optionsCheckboxes.forEach(cb => cb.checked = false);
+    // customStatusInput.value = ''; // Removed
+    // propertyManagementInfoInput.value = ''; // Removed
+    updateAllNotices();
+}
+
+// Event listener for the "Clear Date" button
+clearDateButton.addEventListener('click', () => {
+    entryDateInput.value = '';
+    updateAllNotices();
+});
+
+// Add event listeners for other inputs
+const allNoticeSpecificInputs = [
+    suiteInput, entryDateInput,
+    personOtherInput, entryTypeSelect, natureTextarea, // customStatusInput, propertyManagementInfoInput removed
+    ...personsCheckboxes, ...optionsCheckboxes
+];
+
+allNoticeSpecificInputs.forEach(el => {
+  const eventType = (el.type === 'checkbox' || el.tagName === 'SELECT' || el.type === 'date') ? 'change' : 'input';
+  el.addEventListener(eventType, updateAllNotices);
+});
+
+$('#printButton').addEventListener('click', () => {
+  updateAllNotices();
+  window.print();
+});
+
+$('#clearFormButton').addEventListener('click', clearFormFields);
+
+// Initial setup
+updateAllNotices();
+
+</script>
 </body>
 </html>
